@@ -1,0 +1,11 @@
+FROM jetbrains/teamcity-agent:latest
+
+# Instal AWS CLI & ecs-deploy (https://github.com/fabfuel/ecs-deploy)
+RUN wget "https://bootstrap.pypa.io/get-pip.py" -O /tmp/get-pip.py \
+    && python /tmp/get-pip.py \
+    && pip install awscli --upgrade \
+    && pip install ecs-deploy
+
+# Clean up
+RUN rm -rf /tmp/* \
+    && apt-get clean
