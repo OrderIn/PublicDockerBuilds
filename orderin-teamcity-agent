@@ -1,9 +1,14 @@
 FROM jetbrains/teamcity-agent:latest
 
+ENV DEBIAN_FRONTEND noninteractive
+
 # Install AWS CLI 
 RUN apt-get update 
-RUN apt-get -y install python-setuptools && easy_install pip
+RUN apt-get -y install apt-utils
+RUN apt-get -y install python-setuptools 
+RUN apt-get -y install python-pip
 RUN pip install awscli
+RUN apt-get install unzip
 
 # Install GitVersion.Portable
 RUN apt-get -y install tzdata
@@ -17,6 +22,12 @@ RUN echo "mono /GitVersion/GitVersion.exe \"\$@\"" >> gitversion
 RUN ln -s $(pwd)/gitversion /usr/local/bin/gitversion
 RUN chmod 777 $(pwd)/gitversion
 
+# Install Node.js
+
+RUN apt-get -y install nodejs npm
+
 # Clean up
 RUN rm -rf /tmp/* \
     && apt-get clean
+
+ENV DEBIAN_FRONTEND teletype
