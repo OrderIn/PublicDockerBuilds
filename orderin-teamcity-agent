@@ -1,6 +1,10 @@
 FROM jetbrains/teamcity-agent:latest
 
 ENV DEBIAN_FRONTEND noninteractive
+ENV APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE nowarning
+
+# Print Ubuntu version
+RUN lsb_release -d 
 
 # Install AWS CLI 
 RUN apt-get update 
@@ -9,21 +13,26 @@ RUN apt-get -y install python-setuptools
 RUN apt-get -y install python-pip
 RUN pip install awscli
 RUN apt-get install unzip
-
-# Install GitVersion.Portable
-RUN apt-get -y install tzdata
 RUN apt-get -y install wget
+RUN apt-get -y install tzdata
 RUN apt-get -y install mono-complete
 RUN apt-get -y install libcurl3
-RUN wget https://github.com/GitTools/GitVersion/releases/download/v4.0.0-beta.12/GitVersion_4.0.0-beta0012.zip
-RUN unzip GitVersion_4.0.0-beta0012.zip -d GitVersion
+
+# Install PowerShell Core
+RUN wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb
+RUN dpkg -i packages-microsoft-prod.deb
+RUN apt update
+RUN apt -y install powershell
+
+# Install GitVersion.Portable
+RUN wget https://github.com/GitTools/GitVersion/releases/download/v4.0.0/GitVersion-bin-net40-v4.0.0.zip
+RUN unzip GitVersion-bin-net40-v4.0.0.zip -d GitVersion
 RUN cd GitVersion
 RUN echo "mono /GitVersion/GitVersion.exe \"\$@\"" >> gitversion
 RUN ln -s $(pwd)/gitversion /usr/local/bin/gitversion
 RUN chmod 777 $(pwd)/gitversion
 
 # Install Node.js
-
 RUN apt-get -y install nodejs npm
 
 # Clean up
