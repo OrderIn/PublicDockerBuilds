@@ -23,8 +23,19 @@ RUN ln -s $(pwd)/gitversion /usr/local/bin/gitversion
 RUN chmod 777 $(pwd)/gitversion
 
 # Install Node.js
-
 RUN apt-get -y install nodejs npm
+
+# use npm to update npm.. as lts npm is not latest
+RUN npm i npm@latest -g 
+
+# confirm node versions
+RUN node -v
+RUN npm -v
+
+# Install libpng12 - due to Ubuntu no longer supporting it 
+RUN wget -q -O /tmp/libpng12.deb http://mirrors.kernel.org/ubuntu/pool/main/libp/libpng/libpng12-0_1.2.54-1ubuntu1_amd64.deb \ 
+ && dpkg -i /tmp/libpng12.deb \ 
+ && rm /tmp/libpng12.deb 
 
 # Clean up
 RUN rm -rf /tmp/* \
