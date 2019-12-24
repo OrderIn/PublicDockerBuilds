@@ -44,8 +44,7 @@ RUN wget https://download.visualstudio.microsoft.com/download/pr/022d9abf-35f0-4
         && find /usr/share/dotnet -name "*.lzma" -type f -delete 
 
 #Install Kubectl
-RUN apt-get update -y \
-&& apt-get install curl -y \
+RUN apt-get install curl -y \
 && curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl \
 && chmod +x ./kubectl \
 && mv ./kubectl /usr/local/bin/kubectl
