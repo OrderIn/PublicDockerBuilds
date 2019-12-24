@@ -2,30 +2,32 @@ FROM jetbrains/teamcity-agent:latest
 ENV DEBIAN_FRONTEND noninteractive
 
 # Install AWS CLI 
+
 RUN apt-get update --fix-missing
 RUN apt-get -y install apt-utils
 RUN apt-get -y install python-setuptools 
 RUN apt-get -y install python-pip
 RUN pip install awscli
-RUN apt-get install unzip
-
-# Install GitVersion.Portable
 RUN apt-get -y install tzdata
 RUN apt-get -y install wget
-RUN apt-get -y install mono-complete
-RUN apt-get -y install libcurl3
-RUN wget https://github.com/GitTools/GitVersion/releases/download/v4.0.0-beta.12/GitVersion_4.0.0-beta0012.zip
-RUN unzip GitVersion_4.0.0-beta0012.zip -d GitVersion
-RUN rm -rf GitVersion_4.0.0-beta0012.zip
-RUN cd GitVersion
-RUN echo "mono /GitVersion/GitVersion.exe \"\$@\"" >> gitversion
+
+
+# Install GitVersion
+
+RUN mkdir GitVersion
+RUN wget https://github.com/GitTools/GitVersion/releases/download/5.1.3/gitversion-linux-5.1.3.tar.gz
+RUN tar -xvf gitversion-linux-5.1.3.tar.gz -C GitVersion
+RUN rm -rf gitversion-linux-5.1.3.tar.gz
+RUN echo "/GitVersion/GitVersion \"\$@\"" >> gitversion
 RUN ln -s $(pwd)/gitversion /usr/local/bin/gitversion
 RUN chmod 777 $(pwd)/gitversion
 
 # Install Node.js
+
 RUN apt-get -y install nodejs npm
 
 # Install Resharper CLI Tools
+
 RUN mkdir ReSharper
 RUN wget https://download.jetbrains.com/resharper/ReSharperUltimate.2019.3/JetBrains.ReSharper.CommandLineTools.Unix.2019.3.tar.gz
 RUN tar -xvf /JetBrains.ReSharper.CommandLineTools.Unix.2019.3.tar.gz -C ReSharper
