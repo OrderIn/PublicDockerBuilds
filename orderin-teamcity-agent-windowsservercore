@@ -19,3 +19,7 @@ RUN choco install awscli
 RUN choco install kubernetes-cli
 
 RUN choco install resharper-clt
+
+RUN choco install dotnetcore --version=2.2.2
+
+ENTRYPOINT ["powershell", "BuildAgent/run-agent.ps1"]
