@@ -1,1 +1,21 @@
-FROM jetbrains/teamcity-agent:latest
+FROM jetbrains/teamcity-agent:2019.2-windowsservercore-1809
+ 
+ENV chocolateyUseWindowsCompression true
+ENV chocolateyIgnoreProxy true
+
+SHELL ["powershell"]
+
+RUN Set-ExecutionPolicy Bypass -Scope Process -Force;
+RUN iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+
+RUN choco feature enable -n allowGlobalConfirmation
+
+RUN choco install nodejs
+
+RUN choco install gitversion.portable --version 5.1.3
+
+RUN choco install awscli
+
+RUN choco install kubernetes-cli
+
+RUN choco install resharper-clt
