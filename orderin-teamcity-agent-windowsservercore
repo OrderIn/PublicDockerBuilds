@@ -20,6 +20,11 @@ RUN choco install kubernetes-cli
 
 RUN choco install resharper-clt
 
-RUN choco install dotnetcore --version=2.2.2
+RUN choco install dotnetcore --version=2.2.0
+
+RUN choco install dotnetcore-sdk --version=2.2.0
 
 ENTRYPOINT ["powershell", "BuildAgent/run-agent.ps1"]
+
+
+

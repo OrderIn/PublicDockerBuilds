@@ -44,10 +44,16 @@ RUN wget https://download.visualstudio.microsoft.com/download/pr/022d9abf-35f0-4
         && find /usr/share/dotnet -name "*.lzma" -type f -delete 
 
 #Install Kubectl
+
 RUN apt-get install curl -y \
 && curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl \
 && chmod +x ./kubectl \
 && mv ./kubectl /usr/local/bin/kubectl
+
+#Increasing the amount of inotify file watchers as we run multiple instances on one container which may run multiple processes under the same user
+
+RUN echo fs.inotify.max_user_instances=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+
 
 # Clean up
 RUN rm -rf /tmp/* \
