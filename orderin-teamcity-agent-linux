@@ -54,6 +54,13 @@ RUN apt-get install curl -y \
 
 RUN echo fs.inotify.max_user_instances=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
 
+#Install strong password generator - helps with setting up db users and connection strings
+
+RUN apt-get -y install pwgen
+
+#Install PostgreSQL command line tools
+
+RUN apt-get -y install postgresql
 
 # Clean up
 RUN rm -rf /tmp/* \
