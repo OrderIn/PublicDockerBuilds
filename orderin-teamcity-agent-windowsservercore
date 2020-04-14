@@ -24,6 +24,11 @@ RUN choco install dotnetcore --version=2.2.0
 
 RUN choco install dotnetcore-sdk --version=2.2.0
 
+RUN choco install kubernetes-helm \
+    && helm version \
+    && helm plugin install https://github.com/hypnoglow/helm-s3.git \
+    && helm s3 version --mode 
+
 ENTRYPOINT ["powershell", "BuildAgent/run-agent.ps1"]
 
 
