@@ -65,6 +65,14 @@ RUN apt-get -y install pwgen
 
 RUN apt-get -y install postgresql
 
+# Install helm and helm-s3 plugin
+RUN apt-get -y install openssl 
+RUN apt-get -y install git 
+RUN curl -L https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash 
+RUN helm version 
+RUN helm plugin install https://github.com/hypnoglow/helm-s3.git 
+RUN helm s3 version --mode 
+
 # Clean up
 RUN rm -rf /tmp/* \
     && apt-get clean
