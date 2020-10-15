@@ -73,6 +73,15 @@ RUN helm version
 RUN helm plugin install https://github.com/hypnoglow/helm-s3.git 
 RUN helm s3 version --mode 
 
+# Install checkov for scanning kubernetes (helm) manifest files for security vulnerabilities
+RUN apt-get -y install python3-pip \
+    && pip3 install --upgrade pip \
+    && pip3 install --upgrade setuptools \
+    && pip3 install checkov \
+    && pip install utils \
+    && pip3 install dataclasses \
+    && checkov --version # check installed version
+    
 # Clean up
 RUN rm -rf /tmp/* \
     && apt-get clean
