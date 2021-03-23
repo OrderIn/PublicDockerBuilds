@@ -3,13 +3,13 @@ ENV DEBIAN_FRONTEND noninteractive
 
 # Install AWS CLI
 USER root
-RUN apt-get update --fix-missing
-RUN apt-get -y install apt-utils
-RUN apt-get -y install python-setuptools
-RUN apt install -y python3-pip
+
+RUN apt-get update --fix-missing && apt-get -y install apt-utils \ 
+                                             python-setuptools \
+                                             python3-pip \
+                                             tzdata \
+                                             wget
 RUN pip3 install awscli
-RUN apt-get -y install tzdata
-RUN apt-get -y install wget
 
 
 # Install GitVersion
@@ -40,12 +40,25 @@ ENV PATH="/ReSharper/:${PATH}"
 RUN ln -s /ReSharper/inspectcode.sh /ReSharper/inspectcode
 RUN ln -s /ReSharper/dupfinder.sh /ReSharper/dupfinder
 
-# Install .Net Core 5.0
+# Add microsoft packages to apt list 
 
-RUN wget https://download.visualstudio.microsoft.com/download/pr/64a6b4b9-a92e-4efc-a588-569d138919c6/a97f4be78d7cc237a4f5c306866f7a1c/dotnet-sdk-5.0.200-linux-x64.tar.gz \
-&& tar -xvf dotnet-sdk-5.0.200-linux-x64.tar.gz -C /usr/share/dotnet \
-        && rm dotnet-sdk-5.0.200-linux-x64.tar.gz \
-        && find /usr/share/dotnet -name "*.lzma" -type f -delete
+RUN wget https://packages.microsoft.com/config/debian/10/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && apt-get install ./packages-microsoft-prod.deb \
+&& rm ./packages-microsoft-prod.deb
+
+# Install dotnet 5.0, dotnet 3.1, dotnet 2.1
+RUN apt-get update --fix-missing && apt-get install -y dotnet-sdk-5.0 \
+                                                       dotnet-sdk-3.1 \
+                                                       dotnet-sdk-2.1
+
+#Install dotnet 2.2 depenndency 
+RUN wget http://ftp.us.debian.org/debian/pool/main/i/icu/libicu57_57.1-6+deb9u4_amd64.deb  && apt-get install ./libicu57_57.1-6+deb9u4_amd64.deb \
+&& rm ./libicu57_57.1-6+deb9u4_amd64.deb
+
+#Install dotnet 2.2
+RUN apt-get install -y dotnet-runtime-deps-2.2  \
+    dotnet-runtime-2.2 \
+     aspnetcore-runtime-2.2 \ 
+     dotnet-sdk-2.2 
 
 #Install Kubectl
 
