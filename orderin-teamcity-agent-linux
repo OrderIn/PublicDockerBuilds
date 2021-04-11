@@ -29,7 +29,7 @@ RUN apt-get install curl -y
 RUN curl -sL https://deb.nodesource.com/setup_12.x -o nodesource_setup.sh
 RUN bash nodesource_setup.sh
 RUN apt-get install nodejs
-
+RUN npm install -g logrocket-cli
 # Install Resharper CLI Tools
 
 RUN mkdir ReSharper
